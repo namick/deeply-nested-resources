@@ -1,4 +1,4 @@
-<%= form_for(@magazine) do |f| %>
+<%= form_for([@publisher, @magazine]) do |f| %>
   <% if @magazine.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@magazine.errors.count, "error") %> prohibited this magazine from being saved:</h2>

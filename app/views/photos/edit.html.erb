@@ -2,5 +2,5 @@
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @photo %> |
-<%= link_to 'Back', photos_path %>
+<%= link_to 'Show', [@publisher, @magazine, @photo] %> |
+<%= link_to 'Back', publisher_magazine_photos_path(@publisher, @magazine) %>

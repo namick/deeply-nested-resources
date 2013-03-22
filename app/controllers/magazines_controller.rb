@@ -1,4 +1,5 @@
 class MagazinesController < ApplicationController
+  before_filter :find_publisher
   # GET /magazines
   # GET /magazines.json
   def index
@@ -24,7 +25,7 @@ class MagazinesController < ApplicationController
   # GET /magazines/new
   # GET /magazines/new.json
   def new
-    @magazine = Magazine.new
+    @magazine = @publisher.magazines.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,11 +41,11 @@ class MagazinesController < ApplicationController
   # POST /magazines
   # POST /magazines.json
   def create
-    @magazine = Magazine.new(params[:magazine])
+    @magazine = @publisher.magazines.build(params[:magazine])
 
     respond_to do |format|
       if @magazine.save
-        format.html { redirect_to @magazine, notice: 'Magazine was successfully created.' }
+        format.html { redirect_to [@publisher, @magazine], notice: 'Magazine was successfully created.' }
         format.json { render json: @magazine, status: :created, location: @magazine }
       else
         format.html { render action: "new" }
@@ -60,7 +61,7 @@ class MagazinesController < ApplicationController
 
     respond_to do |format|
       if @magazine.update_attributes(params[:magazine])
-        format.html { redirect_to @magazine, notice: 'Magazine was successfully updated.' }
+        format.html { redirect_to [@publisher, @magazine], notice: 'Magazine was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,8 +77,14 @@ class MagazinesController < ApplicationController
     @magazine.destroy
 
     respond_to do |format|
-      format.html { redirect_to magazines_url }
+      format.html { redirect_to publisher_magazines_url(@publisher) }
       format.json { head :no_content }
     end
   end
+
+  private
+
+    def find_publisher
+      @publisher = Publisher.find(params[:publisher_id])
+    end
 end

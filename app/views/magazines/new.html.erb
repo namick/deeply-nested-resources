@@ -1,5 +1,5 @@
-<h1>New magazine</h1>
+<h1>New magazine for <%= @publisher.name %> publisher</h1>
 
 <%= render 'form' %>
 
-<%= link_to 'Back', magazines_path %>
+<%= link_to 'Back', publisher_magazines_path(@publisher) %>

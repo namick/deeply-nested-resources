@@ -1,4 +1,6 @@
 class PhotosController < ApplicationController
+  before_filter :find_publisher_and_magazine
+
   # GET /photos
   # GET /photos.json
   def index
@@ -24,7 +26,7 @@ class PhotosController < ApplicationController
   # GET /photos/new
   # GET /photos/new.json
   def new
-    @photo = Photo.new
+    @photo = @magazine.photos.build
 
     respond_to do |format|
       format.html # new.html.erb
@@ -44,7 +46,7 @@ class PhotosController < ApplicationController
 
     respond_to do |format|
       if @photo.save
-        format.html { redirect_to @photo, notice: 'Photo was successfully created.' }
+        format.html { redirect_to [@publisher, @magazine, @photo], notice: 'Photo was successfully created.' }
         format.json { render json: @photo, status: :created, location: @photo }
       else
         format.html { render action: "new" }
@@ -60,7 +62,7 @@ class PhotosController < ApplicationController
 
     respond_to do |format|
       if @photo.update_attributes(params[:photo])
-        format.html { redirect_to @photo, notice: 'Photo was successfully updated.' }
+        format.html { redirect_to [@publisher, @magazine, @photo], notice: 'Photo was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -76,8 +78,16 @@ class PhotosController < ApplicationController
     @photo.destroy
 
     respond_to do |format|
-      format.html { redirect_to photos_url }
+      format.html { redirect_to publisher_magazine_photos_url(@publisher, @magazine) }
       format.json { head :no_content }
     end
   end
+
+  private
+
+    def find_publisher_and_magazine
+      @publisher = Publisher.find(params[:publisher_id])
+      @magazine = Magazine.find(params[:magazine_id])
+    end
+
 end
