@@ -1,11 +1,12 @@
 Nested3::Application.routes.draw do
-  resources :photos
+
+  resources :publishers do
+    resources :magazines do
+      resources :photos
+    end
+  end
 
 
-  resources :magazines
-
-
-  resources :publishers
 
 
   # The priority is based upon order of creation:
